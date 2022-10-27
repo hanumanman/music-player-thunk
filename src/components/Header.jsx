@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { selectMusicPlayer } from "../slices/playerSlice";
 
 function Header() {
-  const musicPlayer = useSelector(selectMusicPlayer);
+  //const musicPlayer = useSelector(selectMusicPlayer);
 
   return (
     <div id="header">
-      {musicPlayer.tracks[musicPlayer.currentTrackIndex].name}
+      {/* {musicPlayer.tracks[musicPlayer.currentTrackIndex].name} */} HEADER
     </div>
   );
 }

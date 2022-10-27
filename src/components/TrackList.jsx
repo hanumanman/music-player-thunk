@@ -1,14 +1,21 @@
 import React from "react";
-import { playTrack, selectMusicPlayer } from "../slices/playerSlice";
+import { selectMusicPlayer, playTrack, trackList } from "../slices/playerSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 function TrackList() {
   const musicPlayer = useSelector(selectMusicPlayer);
   const dispatch = useDispatch();
+  console.log(musicPlayer.isPlaying);
   return (
     <div id="trackList">
-      {musicPlayer.tracks.map((track, index) => (
-        <button onClick={() => dispatch(playTrack(index))} key={index}>
+      {trackList.map((track, index) => (
+        <button
+          onClick={() => {
+            console.log(musicPlayer.isPlaying);
+            dispatch(playTrack(index, musicPlayer.isPlaying));
+          }}
+          key={index}
+        >
           {track.name}
         </button>
       ))}

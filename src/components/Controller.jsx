@@ -5,14 +5,19 @@ import {
   playNextTrack,
   playPrevTrack,
   selectMusicPlayer,
+  playPrev,
 } from "../slices/playerSlice";
 
 function Controller() {
   const dispatch = useDispatch();
   const musicPlayer = useSelector(selectMusicPlayer);
+  const trackIndex = musicPlayer.currentTrackIndex;
+
   return (
     <div id="controller">
-      <button onClick={() => dispatch(playPrevTrack())}>Prev</button>
+      <button onClick={() => dispatch(playPrev(dispatch, trackIndex, 3))}>
+        Prev
+      </button>
 
       {musicPlayer.isPlaying ? (
         <button onClick={() => dispatch(togglePlay())}>Pause</button>

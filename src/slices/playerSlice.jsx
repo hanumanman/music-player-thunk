@@ -1,31 +1,52 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import Track1 from "../assets/audio/1.mp3";
 import Track2 from "../assets/audio/2.mp3";
 import Track3 from "../assets/audio/3.mp3";
 
+const audioPlaying = new Audio(Track1);
+
 const initialState = {
-  audioPlayer: new Audio(Track1),
-  tracks: [
-    {
-      name: "Drop It",
-      file: Track1,
-    },
-    {
-      name: "Password Infinity",
-      file: Track2,
-    },
-    {
-      name: "The Beat Of Nature",
-      file: Track3,
-    },
-  ],
   currentTrackIndex: 0,
   isPlaying: false,
 };
 
+export const playPrev = createAsyncThunk("playPrev", async (index, length) => {
+  const newIndex = (((index + -1) % length) + length) % length;
+  const audio = new Audio(trackList[newIndex].file);
+  audio.play();
+  return {
+    currentTrackIndex: newIndex,
+    isPlaying: true,
+  };
+});
+
+export const trackList = [{ name: "Drop It", file: Track1 }];
+
+export const playTrack = createAsyncThunk(
+  "playTrack",
+  async (index, isTrackPlaying) => {
+    console.log(trackList[index].file);
+    console.log(`is playing`, isTrackPlaying);
+    const audio = new Audio(trackList[index].file);
+    if (isTrackPlaying) {
+      audio.pause();
+      return {
+        currentTrackIndex: index,
+        isTrackPlaying: false,
+      };
+    } else {
+      audio.play();
+      return {
+        currentTrackIndex: index,
+        isTrackPlaying: true,
+      };
+    }
+  }
+);
+
 export const playerSlice = createSlice({
-  name: "playerSlice",
+  name: "abdasd",
   initialState,
   reducers: {
     togglePlay: (state) => {
@@ -36,24 +57,11 @@ export const playerSlice = createSlice({
       }
       state.isPlaying = !state.isPlaying;
     },
-
-    playTrack: (state, action) => {
-      console.log(action.payload);
+    UpdateStore: (state, action) => {
       if (action.payload === state.currentTrackIndex) {
-        // if (state.isPlaying) {
-        //   state.audioPlayer.pause();
-        // } else {
-        //   state.audioPlayer.play();
-        // }
-        // state.isPlaying = !state.isPlaying;
+        state.isPlaying = !state.isPlaying;
         playerSlice.caseReducers.togglePlay(state);
       } else {
-        state.audioPlayer.pause();
-        const audio = new Audio(state.tracks[action.payload].file);
-        audio.loop = true;
-        state.audioPlayer = audio;
-        state.audioPlayer.play();
-
         state.currentTrackIndex = action.payload;
         state.isPlaying = true;
       }
@@ -67,14 +75,25 @@ export const playerSlice = createSlice({
         (((state.currentTrackIndex + -1) % state.tracks.length) +
           state.tracks.length) %
         state.tracks.length;
-
       playerSlice.caseReducers.playTrack(state, { payload: newIndex });
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(playPrev.fulfilled, (state, action) => {
+      console.log(action);
+    });
+    builder.addCase(playTrack.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.isPlaying = action.payload.isTrackPlaying;
+      state.currentTrackIndex = action.payload.currentTrackIndex;
+    });
+    builder.addCase(playTrack.rejected, (state, action) => {
+      console.log(action);
+    });
   },
 });
 
 export const selectMusicPlayer = (state) => state.musicPlayer;
 
-export const { playTrack, playNextTrack, playPrevTrack, togglePlay } =
-  playerSlice.actions;
+export const { playNextTrack, playPrevTrack, togglePlay } = playerSlice.actions;
 export default playerSlice.reducer;
