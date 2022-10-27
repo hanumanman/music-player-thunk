@@ -1,0 +1,65 @@
+#container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#musicPlayer {
+  background-color: #5f9ea0;
+  height: 50vh;
+  max-width: 50vw;
+  aspect-ratio: 1/1;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#header,
+#controller {
+  background-color: #f1ffc4;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: steelblue;
+}
+
+#header {
+  border-radius: 10px 10px 0px 0px;
+}
+
+#controller {
+  border-radius: 0px 0px 10px 10px;
+}
+
+#trackList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#trackList button {
+  width: 70%;
+  font-size: 0.7rem;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#controller button {
+  margin: 5px;
+  border-radius: 50%;
+  height: 2rem;
+  font-size: 0.7rem;
+  background-color: azure;
+  color: black;
+  cursor: pointer;
+}
+
+#controller button:hover {
+  background-color: rgb(253, 240, 255);
+}
