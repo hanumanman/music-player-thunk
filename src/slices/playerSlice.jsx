@@ -25,21 +25,23 @@ export const trackList = [{ name: "Drop It", file: Track1 }];
 
 export const playTrack = createAsyncThunk(
   "playTrack",
-  async (index, isTrackPlaying) => {
-    console.log(trackList[index].file);
-    console.log(`is playing`, isTrackPlaying);
+  async ({ index, isPlaying }) => {
+    console.log(`index is`, index);
+    console.log(`tracklist file is`, trackList[index].file);
+    console.log(`is playing at slice`, isPlaying);
     const audio = new Audio(trackList[index].file);
-    if (isTrackPlaying) {
+    if (isPlaying) {
       audio.pause();
+      console.log(`pause`, isPlaying);
       return {
         currentTrackIndex: index,
-        isTrackPlaying: false,
+        isPlaying: false,
       };
     } else {
       audio.play();
       return {
         currentTrackIndex: index,
-        isTrackPlaying: true,
+        isPlaying: true,
       };
     }
   }
@@ -84,7 +86,7 @@ export const playerSlice = createSlice({
     });
     builder.addCase(playTrack.fulfilled, (state, action) => {
       console.log(action.payload);
-      state.isPlaying = action.payload.isTrackPlaying;
+      state.isPlaying = action.payload.isPlaying;
       state.currentTrackIndex = action.payload.currentTrackIndex;
     });
     builder.addCase(playTrack.rejected, (state, action) => {
